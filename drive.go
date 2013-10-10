@@ -5,7 +5,6 @@ import (
     "os"
     "github.com/voxelbrain/goptions"
     "./gdrive"
-    "./util"
     "./cli"
 )
 
@@ -37,7 +36,13 @@ type Options struct {
         Stdin bool `goptions:"-s, --stdin, mutexgroup='input', obligatory, description='Use stdin as file content'"`
         Title string `goptions:"-t, --title, description='Title to give uploaded file. Defaults to filename'"`
         Share bool `goptions:"--share, description='Share uploaded file'"`
+ 	Folder string `goptions:"--folder, description='Folder containing the file'"`
     } `goptions:"upload"`
+
+    Mkdir struct {
+        Title string `goptions:"-t, --title, obligatory, description='Title to give to newly created folder'"`
+        Share bool `goptions:"--share, description='Share directory'"`
+    } `goptions:"mkdir"`
 
     Download struct {
         FileId string `goptions:"-i, --id, mutexgroup='download', obligatory, description='File Id'"`
@@ -92,10 +97,14 @@ func main() {
         case "upload":
             args := opts.Upload
             if args.Stdin {
-                cli.Upload(drive, os.Stdin, args.Title, args.Share)
+                cli.Upload(drive, os.Stdin, args.Title, args.Share, args.Folder)
             } else {
-                cli.Upload(drive, args.File, args.Title, args.Share)
+                cli.Upload(drive, args.File, args.Title, args.Share, args.Folder)
             }
+
+	case "mkdir":
+            args := opts.Mkdir
+            cli.Mkdir(drive, args.Title, args.Share)
 
         case "download":
             args := opts.Download
@@ -115,15 +124,9 @@ func main() {
             cli.Unshare(drive, opts.Unshare.FileId)
 
         case "url":
-            if opts.Url.Download {
-                fmt.Println(util.DownloadUrl(opts.Url.FileId))
-            } else {
-                fmt.Println(util.PreviewUrl(opts.Url.FileId))
-            }
+            cli.PrintUrl(drive, opts.Url.FileId, opts.Url.Download)
 
         default:
             goptions.PrintHelp()
     }
 }
-
-

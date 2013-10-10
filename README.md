@@ -27,32 +27,37 @@ If you want to compile from source you need the go toolchain: http://golang.org/
         -h, --help     Show this help
 
     Verbs:
-        delete:
-            -i, --id File Id (*)
-        download:
-            -i, --id     File Id (*)
-            -s, --stdout Write file content to stdout
-                --pop    Download latest file, and remove it from google drive
-        info:
-            -i, --id File Id (*)
-        list:
-            -m, --max    Max results
-            -t, --title  Title filter
-            -q, --query  Query (see https://developers.google.com/drive/search-parameters)
-            -s, --shared Show shared status (Note: this will generate 1 http req per file)
-        share:
-            -i, --id File Id (*)
-        unshare:
-            -i, --id File Id (*)
-        upload:
-            -f, --file  File to upload (*)
-            -s, --stdin Use stdin as file content (*)
-            -t, --title Title to give uploaded file. Defaults to filename
-                --share Share uploaded file
-        url:
-            -i, --id       File Id (*)
-            -p, --preview  Generate preview url (default)
-            -d, --download Generate download url
+Verbs:
+    delete:
+        -i, --id       File Id (*)
+    download:
+        -i, --id       File Id (*)
+        -s, --stdout   Write file content to stdout
+            --pop      Download latest file, and remove it from google drive
+    info:
+        -i, --id       File Id (*)
+    list:
+        -m, --max      Max results
+        -t, --title    Title filter
+        -q, --query    Query (see https://developers.google.com/drive/search-parameters)
+        -s, --shared   Show shared status (Note: this will generate 1 http req per file)
+    mkdir:
+        -t, --title    Title to give to newly created folder (*)
+            --share    Share directory
+    share:
+        -i, --id       File Id (*)
+    unshare:
+        -i, --id       File Id (*)
+    upload:
+        -f, --file     File to upload (*)
+        -s, --stdin    Use stdin as file content (*)
+        -t, --title    Title to give uploaded file. Defaults to filename
+            --share    Share uploaded file
+            --folder   Folder containing the file
+    url:
+        -i, --id       File Id (*)
+        -p, --preview  Generate preview url (default)
+        -d, --download Generate download url
 
 ## Examples
 ###### List files
@@ -79,6 +84,16 @@ If you want to compile from source you need the go toolchain: http://golang.org/
 ###### Download file
     $ drive download --id 0B3X9GlR6EmbnenBYSFI4MzN0d2M
     Downloaded 'drive-freebsd-amd64' at 2 MB/s, total 5 MB
+
+###### Create a folder
+    $ drive mkdir -t newFolder
+    Id: 0B4p3owc-L73MRWJRb1pDNGRPdG8
+    Title: newFolder
+    Size: 0 B
+    Created: 2013-10-10 21:32:50
+    Modified: 2013-10-10 21:32:50
+    Shared: False
+    Created folder 'newFolder' at 0 B/s, total 0 B
 
 ###### Share a file
     $ drive share --id 0B3X9GlR6EmbnOVRQN0t6RkxVQk0
