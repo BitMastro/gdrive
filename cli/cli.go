@@ -269,6 +269,7 @@ func Share(d *gdrive.Drive, fileId string) {
         Value: "me",
         Type: "anyone",
         Role: "reader",
+        WithLink: true,
     }
 
     _, err = d.Permissions.Insert(fileId, perm).Do()
